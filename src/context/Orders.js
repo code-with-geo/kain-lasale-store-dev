@@ -126,7 +126,11 @@ const GetOrdersCount = (storeID) => {
 					storeID,
 				})
 					.then((res) => {
-						setOrders(res.data.orders);
+						if (res.data.responsecode === "200") {
+							setOrders(res.data.orders);
+						} else {
+							setOrders("0");
+						}
 					})
 					.catch((err) => {
 						if (err.response) Error();
