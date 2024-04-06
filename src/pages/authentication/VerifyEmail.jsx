@@ -73,8 +73,6 @@ function VerifyEmail() {
 					.then((res) => {
 						if (res.data.responsecode === "402") {
 							navigate("/login");
-						} else if (res.data.responsecode === "200") {
-							alert(res.data.message);
 						}
 					})
 					.catch((err) => {
