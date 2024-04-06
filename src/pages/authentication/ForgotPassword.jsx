@@ -1,16 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import {
-	Button,
-	Label,
-	PageLinks,
-	TextBox,
-} from "../../components/Components.styled";
+import { Button, Label, TextBox } from "../../components/Components.styled";
 import Axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/Auth";
 
 const Container = styled.div`
 	height: 100vh;
@@ -91,28 +84,20 @@ const Form = styled.form`
 	border: 1px solid #dcdee1;
 `;
 
-function Login() {
+function ForgotPassword() {
 	const navigate = useNavigate();
 	const { register, handleSubmit } = useForm();
-	const [_, setCookies] = useCookies(["access_token"]);
-	const { login } = useAuth();
-
-	const _login = (data, event) => {
+	const _forgot = (data, event) => {
 		event.preventDefault();
 		try {
-			Axios.post(`https://kain-lasalle-backend.onrender.com/vendors/login`, {
+			Axios.post(`https://kain-lasalle-backend.onrender.com/vendors/forgot`, {
 				email: data.Email,
-				password: data.Password,
 			})
 				.then((res) => {
 					if (res.data.responsecode === "402") {
 						alert(res.data.message);
 					} else if (res.data.responsecode === "200") {
-						login();
-						setCookies("access_token", res.data.token);
-						window.localStorage.setItem("vendorID", res.data.vendorID);
-						window.localStorage.setItem("storeID", res.data.storeID);
-						window.localStorage.setItem("isAuthenticated", "true");
+						alert(res.data.message);
 						navigate("/");
 					}
 				})
@@ -153,20 +138,20 @@ function Login() {
 							/>
 						</BodyLeft>
 						<BodyRight>
-							<Form onSubmit={handleSubmit(_login)}>
+							<Form onSubmit={handleSubmit(_forgot)}>
 								<Label
-									marginRight='180px'
+									marginRight='155px'
 									fontSize='20px'
 									color='#98ca7a'
 									fontWeight='500'>
-									Secured Login
+									Forgot Password
 								</Label>
 								<Label
 									fontSize='13px'
 									fontWeight='400'
 									marginBottom='20px'
-									marginRight='140px'>
-									Enter your registered email
+									marginRight='60px'>
+									Enter your email to reset your account
 								</Label>
 								<TextBox
 									type='email'
@@ -177,24 +162,6 @@ function Login() {
 									required='true'
 									{...register("Email")}
 								/>
-								<TextBox
-									type='password'
-									width='300px'
-									height='40px'
-									marginBottom='10px'
-									placeholder='Please enter your password'
-									required='true'
-									minLength={8}
-									{...register("Password")}
-								/>
-								<PageLinks
-									marginBottom='10px'
-									color='#000000'
-									fontSize='12px'
-									marginRight='205px'
-									to='/forgot'>
-									Forgot Password?
-								</PageLinks>
 								<Button
 									width='320px'
 									height='40px'
@@ -211,4 +178,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default ForgotPassword;

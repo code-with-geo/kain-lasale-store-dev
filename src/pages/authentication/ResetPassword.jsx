@@ -1,16 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import {
-	Button,
-	Label,
-	PageLinks,
-	TextBox,
-} from "../../components/Components.styled";
+import { Button, Label, TextBox } from "../../components/Components.styled";
 import Axios from "axios";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/Auth";
 
 const Container = styled.div`
 	height: 100vh;
@@ -91,34 +84,35 @@ const Form = styled.form`
 	border: 1px solid #dcdee1;
 `;
 
-function Login() {
+function ResetPassword() {
 	const navigate = useNavigate();
 	const { register, handleSubmit } = useForm();
-	const [_, setCookies] = useCookies(["access_token"]);
-	const { login } = useAuth();
+	const { userID, token } = useParams();
 
-	const _login = (data, event) => {
+	const _reset = (data, event) => {
 		event.preventDefault();
 		try {
-			Axios.post(`https://kain-lasalle-backend.onrender.com/vendors/login`, {
-				email: data.Email,
-				password: data.Password,
-			})
-				.then((res) => {
-					if (res.data.responsecode === "402") {
-						alert(res.data.message);
-					} else if (res.data.responsecode === "200") {
-						login();
-						setCookies("access_token", res.data.token);
-						window.localStorage.setItem("vendorID", res.data.vendorID);
-						window.localStorage.setItem("storeID", res.data.storeID);
-						window.localStorage.setItem("isAuthenticated", "true");
-						navigate("/");
+			if (data.Password === data.Confirm) {
+				Axios.post(
+					`https://kain-lasalle-backend.onrender.com/vendors/${userID}/reset/${token}`,
+					{
+						password: data.Password,
 					}
-				})
-				.catch((err) => {
-					if (err.response) Error();
-				});
+				)
+					.then((res) => {
+						if (res.data.responsecode === "402") {
+							alert(res.data.message);
+						} else if (res.data.responsecode === "200") {
+							alert(res.data.message);
+							navigate("/login");
+						}
+					})
+					.catch((err) => {
+						if (err.response) Error();
+					});
+			} else {
+				alert("Password not match.");
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -153,48 +147,41 @@ function Login() {
 							/>
 						</BodyLeft>
 						<BodyRight>
-							<Form onSubmit={handleSubmit(_login)}>
+							<Form onSubmit={handleSubmit(_reset)}>
 								<Label
-									marginRight='180px'
+									marginRight='170px'
 									fontSize='20px'
 									color='#98ca7a'
 									fontWeight='500'>
-									Secured Login
+									Reset Password
 								</Label>
 								<Label
 									fontSize='13px'
 									fontWeight='400'
 									marginBottom='20px'
-									marginRight='140px'>
-									Enter your registered email
+									marginLeft='25px'>
+									Enter new password to reset your current password
 								</Label>
 								<TextBox
-									type='email'
+									type='password'
 									width='300px'
 									height='40px'
 									marginBottom='10px'
-									placeholder='Please enter your email'
+									placeholder='Please enter your new password'
 									required='true'
-									{...register("Email")}
+									minLength={8}
+									{...register("Password")}
 								/>
 								<TextBox
 									type='password'
 									width='300px'
 									height='40px'
 									marginBottom='10px'
-									placeholder='Please enter your password'
+									placeholder='Please re-enter your new password'
 									required='true'
 									minLength={8}
-									{...register("Password")}
+									{...register("Confirm")}
 								/>
-								<PageLinks
-									marginBottom='10px'
-									color='#000000'
-									fontSize='12px'
-									marginRight='205px'
-									to='/forgot'>
-									Forgot Password?
-								</PageLinks>
 								<Button
 									width='320px'
 									height='40px'
@@ -211,4 +198,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default ResetPassword;

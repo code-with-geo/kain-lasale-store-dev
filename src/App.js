@@ -14,6 +14,9 @@ import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { AuthProvider } from "./context/Auth";
 import Store from "./pages/store/Store";
 import { StoreProvider } from "./context/Store";
+import ForgotPassword from "./pages/authentication/ForgotPassword";
+import ResetPassword from "./pages/authentication/ResetPassword";
+import VerifyEmail from "./pages/authentication/VerifyEmail";
 
 function App() {
 	return (
@@ -25,6 +28,15 @@ function App() {
 							<Router>
 								<Routes>
 									<Route path='/login' element={<Login />} />
+									<Route path='/forgot' element={<ForgotPassword />} />
+									<Route
+										path='/:userID/reset/:token'
+										element={<ResetPassword />}
+									/>
+									<Route
+										path='/:userID/verify/:token'
+										element={<VerifyEmail />}
+									/>
 									<Route element={<ProtectedRoutes />}>
 										<Route path='/' element={<Dashboard />}>
 											<Route index element={<Home />} />

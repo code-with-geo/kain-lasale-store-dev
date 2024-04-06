@@ -83,7 +83,6 @@ function Store() {
 	const store = storeDataByID(storeID);
 	const navigate = useNavigate(storeID);
 	const { handleSubmit } = useForm();
-	console.log(store);
 
 	const [files, setFiles] = useState(null);
 	const [preview, setPreview] = useState();
