@@ -1,17 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Cancel, Visibility } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
 
 const Container = styled.div``;
-
-const CancelButton = styled(Cancel)`
-	cursor: pointer;
-	margin-left: 10px;
-	color: #d44a4a;
-`;
 
 const ViewButton = styled(Visibility)`
 	cursor: pointer;
@@ -28,9 +21,6 @@ function ActionButton({ params }) {
 					<ViewButton
 						onClick={() => navigate(`/orders/view/${params.row._id}`)}
 					/>
-				</Tooltip>
-				<Tooltip title='Cancel Order'>
-					<CancelButton onClick={() => alert(params.row._id)} />
 				</Tooltip>
 			</Container>
 		</>
