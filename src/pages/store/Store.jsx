@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import Axios from "axios";
 import { useGetStoreID } from "../../hooks/Products";
 import { useStore } from "../../context/Store";
+import { ToggleMessage } from "../../utils/SweetAlert";
 
 const Container = styled.div``;
 
@@ -139,7 +140,7 @@ function Store() {
 					if (res.data.responsecode === "402") {
 						console.log(res.data.message);
 					} else if (res.data.responsecode === "200") {
-						alert(res.data.message);
+						ToggleMessage("success", res.data.message);
 					}
 				})
 				.catch((err) => {

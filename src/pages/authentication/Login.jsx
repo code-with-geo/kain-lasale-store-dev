@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/Auth";
+import { ToggleMessage } from "../../utils/SweetAlert";
 
 const Container = styled.div`
 	height: 100vh;
@@ -106,7 +107,7 @@ function Login() {
 			})
 				.then((res) => {
 					if (res.data.responsecode === "402") {
-						alert(res.data.message);
+						ToggleMessage("error", res.data.message);
 					} else if (res.data.responsecode === "200") {
 						login();
 						setCookies("access_token", res.data.token);
