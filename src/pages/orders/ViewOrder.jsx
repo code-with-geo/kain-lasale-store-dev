@@ -163,6 +163,29 @@ function ViewOrder() {
 			}
 		});
 	};
+
+	const payOrder = () => {
+		try {
+			Axios.post(
+				`https://kain-lasalle-main-backend.onrender.com/orders/verify`,
+				{
+					orderID,
+				}
+			)
+				.then((res) => {
+					if (res.data.responsecode === "402") {
+						ToggleMessage("error", res.data.message);
+					} else if (res.data.responsecode === "200") {
+						window.open(`${res.data.paymentURL}`, "_blank");
+					}
+				})
+				.catch((err) => {
+					if (err.response) Error();
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<Container>
@@ -213,6 +236,17 @@ function ViewOrder() {
 									Paid
 								</Button>
 							)}
+							{data != null && data[0].paymentType === "Pay Online" && (
+								<Button
+									marginRight='10px'
+									height='40px'
+									width='200px'
+									bgColor='#b0c5a4'
+									color='#fff'
+									onClick={() => payOrder()}>
+									Pay Online
+								</Button>
+							)}
 							<Button
 								marginRight='10px'
 								height='40px'
@@ -222,14 +256,16 @@ function ViewOrder() {
 								onClick={() => NotifyCustomer(data != null && data[0]._id)}>
 								Ready to Serve
 							</Button>
-							<Button
-								height='40px'
-								width='200px'
-								bgColor='#b0c5a4'
-								color='#fff'
-								onClick={() => completeOrder(data != null && data[0]._id)}>
-								Complete Order
-							</Button>
+							{data != null && data[0].paymentStatus !== "pending" && (
+								<Button
+									height='40px'
+									width='200px'
+									bgColor='#b0c5a4'
+									color='#fff'
+									onClick={() => completeOrder(data != null && data[0]._id)}>
+									Complete Order
+								</Button>
+							)}
 						</Bottom>
 					</ActionContianer>
 				</Wrapper>
