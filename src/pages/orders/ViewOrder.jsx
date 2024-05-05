@@ -71,7 +71,7 @@ function ViewOrder() {
 	const { orderID } = useParams();
 	const { ordersDataByID } = useOrders();
 	const data = ordersDataByID(orderID);
-	const completeOrder = () => {
+	const completeOrder = (orderID) => {
 		Swal.fire({
 			title: "Complete Order",
 			text: "Are you sure you want to complete this order?",
@@ -227,7 +227,7 @@ function ViewOrder() {
 								width='200px'
 								bgColor='#b0c5a4'
 								color='#fff'
-								onClick={() => completeOrder()}>
+								onClick={() => completeOrder(data != null && data[0]._id)}>
 								Complete Order
 							</Button>
 						</Bottom>
