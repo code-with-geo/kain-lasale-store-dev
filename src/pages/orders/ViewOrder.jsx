@@ -233,17 +233,20 @@ function ViewOrder() {
 									Paid
 								</Button>
 							)}
-							{data != null && data[0].paymentType === "Pay Online" && (
-								<Button
-									marginRight='10px'
-									height='40px'
-									width='200px'
-									bgColor='#b0c5a4'
-									color='#fff'
-									onClick={() => payOrder()}>
-									Pay Online
-								</Button>
-							)}
+
+							{data != null &&
+								data[0].paymentType === "Pay Online" &&
+								data[0].paymentStatus === "pending" && (
+									<Button
+										marginRight='10px'
+										height='40px'
+										width='200px'
+										bgColor='#b0c5a4'
+										color='#fff'
+										onClick={() => payOrder()}>
+										Pay Online
+									</Button>
+								)}
 							<Button
 								marginRight='10px'
 								height='40px'

@@ -19,6 +19,13 @@ const TableColumns = [
 		headerClassName: "theme-header",
 	},
 	{
+		field: "orderNumber",
+		headerName: "Order Number",
+		flex: 1,
+		resizable: false,
+		headerClassName: "theme-header",
+	},
+	{
 		field: "total",
 		headerName: "Total",
 		flex: 1,
