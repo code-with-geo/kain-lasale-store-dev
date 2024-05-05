@@ -209,7 +209,7 @@ function ViewOrder() {
 									width='200px'
 									bgColor='#b0c5a4'
 									color='#fff'
-									onClick={() => TagAsPaid()}>
+									onClick={() => TagAsPaid(data != null && data[0]._id)}>
 									Paid
 								</Button>
 							)}
