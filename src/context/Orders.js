@@ -239,6 +239,62 @@ const GetCancelledOrders = (storeID) => {
 	return orders;
 };
 
+const GetTodaysSale = (storeID) => {
+	const [total, setTotal] = useState(null);
+
+	useEffect(() => {
+		const getTodaysSale = () => {
+			try {
+				Axios.post(
+					`https://kain-lasalle-backend.onrender.com/orders/today-sale`,
+					{
+						storeID,
+					}
+				)
+					.then((res) => {
+						setTotal(res.data.todaysSale);
+					})
+					.catch((err) => {
+						if (err.response) Error();
+						console.log(err);
+					});
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getTodaysSale();
+	}, [storeID]);
+	return total;
+};
+
+const GetYesterdaySale = (storeID) => {
+	const [total, setTotal] = useState(null);
+
+	useEffect(() => {
+		const getYesterdaySale = () => {
+			try {
+				Axios.post(
+					`https://kain-lasalle-backend.onrender.com/orders/yesterday-sale`,
+					{
+						storeID,
+					}
+				)
+					.then((res) => {
+						setTotal(res.data.yesterdaysSale);
+					})
+					.catch((err) => {
+						if (err.response) Error();
+						console.log(err);
+					});
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getYesterdaySale();
+	}, [storeID]);
+	return total;
+};
+
 export const OrdersProvider = (props) => {
 	const ordersData = (storeID) => GetAllOrders(storeID);
 	const ordersItemData = (orderID) => GetOrderItems(orderID);
@@ -248,6 +304,8 @@ export const OrdersProvider = (props) => {
 	const countUnpaidData = (storeID) => GetUnpaidOrderCount(storeID);
 	const countSoldOutData = (storeID) => GetSoldOutProduct(storeID);
 	const countCancelledOrdersData = (storeID) => GetCancelledOrders(storeID);
+	const todaysSaleData = (storeID) => GetTodaysSale(storeID);
+	const yesterdaysSaleData = (storeID) => GetYesterdaySale(storeID);
 
 	const ordersMethod = {
 		ordersData,
@@ -258,6 +316,8 @@ export const OrdersProvider = (props) => {
 		countUnpaidData,
 		countSoldOutData,
 		countCancelledOrdersData,
+		todaysSaleData,
+		yesterdaysSaleData,
 	};
 	return (
 		<OrdersContext.Provider value={ordersMethod}>

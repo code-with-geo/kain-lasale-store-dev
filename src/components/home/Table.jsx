@@ -26,6 +26,14 @@ const TableColumns = [
 		headerClassName: "theme-header",
 	},
 	{
+		field: "user",
+		headerName: "Customer Name",
+		flex: 1,
+		resizable: false,
+		headerClassName: "theme-header",
+		renderCell: (params) => params.value[0].name,
+	},
+	{
 		field: "total",
 		headerName: "Total",
 		flex: 1,
@@ -33,15 +41,29 @@ const TableColumns = [
 		resizable: false,
 	},
 	{
+		field: "paymentType",
+		headerName: "Payment Type",
+		flex: 1,
+		headerClassName: "theme-header",
+		resizable: false,
+	},
+	{
+		field: "paymentStatus",
+		headerName: "Payment Status",
+		flex: 1,
+		headerClassName: "theme-header",
+		resizable: false,
+	},
+	{
 		field: "orderStatus",
-		headerName: "Status",
+		headerName: "Order Status",
 		flex: 1,
 		headerClassName: "theme-header",
 		resizable: false,
 	},
 	{
 		field: "orderDateTime",
-		headerName: "Date/Time",
+		headerName: "Date",
 		flex: 1,
 		headerClassName: "theme-header",
 		resizable: false,
@@ -82,7 +104,7 @@ function Table() {
 					columns={TableColumns}
 					initialState={{
 						pagination: {
-							paginationModel: { page: 0, pageSize: 5 },
+							paginationModel: { page: 0, pageSize: 10 },
 						},
 					}}
 					pageSizeOptions={[5, 10]}

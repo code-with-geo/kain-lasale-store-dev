@@ -183,13 +183,50 @@ function ViewOrder() {
 			console.log(error);
 		}
 	};
+
+	const cancelOrder = (orderID) => {
+		Swal.fire({
+			title: "Cancel Transaction",
+			text: "Are you sure you want to cancel this transaction?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#b0c5a4",
+			confirmButtonText: "Proceed",
+			cancelButtonColor: "#FF204E",
+			cancelButtonText: `Cancel`,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				try {
+					Axios.post(
+						`https://kain-lasalle-backend.onrender.com/orders/cancellation`,
+						{
+							orderID,
+						}
+					)
+						.then((res) => {
+							if (res.data.responsecode === "402") {
+								ToggleMessage("error", res.data.message);
+							} else if (res.data.responsecode === "200") {
+								ToggleMessage("error", res.data.message);
+							}
+						})
+						.catch((err) => {
+							if (err.response) Error();
+						});
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		});
+	};
+
 	return (
 		<>
 			<Container>
 				<Wrapper>
 					<Header>
 						<Left>
-							<BackArrow fontSize='small' onClick={() => navigate("/")} />
+							<BackArrow fontSize='small' onClick={() => navigate("/orders")} />
 							<h2>Ordered Product</h2>
 						</Left>
 						<Right>
@@ -222,21 +259,23 @@ function ViewOrder() {
 							<Label>{data != null && data[0].total}</Label>
 						</Top>
 						<Bottom>
-							{data != null && data[0].paymentType === "Cash" && (
-								<Button
-									marginRight='10px'
-									height='40px'
-									width='200px'
-									bgColor='#b0c5a4'
-									color='#fff'
-									onClick={() => TagAsPaid(data != null && data[0]._id)}>
-									Paid
-								</Button>
-							)}
+							{data != null &&
+								data[0].paymentType === "Cash" &&
+								data[0].orderStatus === "Pending" && (
+									<Button
+										marginRight='10px'
+										height='40px'
+										width='200px'
+										bgColor='#b0c5a4'
+										color='#fff'
+										onClick={() => TagAsPaid(data != null && data[0]._id)}>
+										Paid
+									</Button>
+								)}
 
 							{data != null &&
 								data[0].paymentType === "Pay Online" &&
-								data[0].paymentStatus === "pending" && (
+								data[0].paymentStatus === "Pending" && (
 									<Button
 										marginRight='10px'
 										height='40px'
@@ -247,16 +286,39 @@ function ViewOrder() {
 										Pay Online
 									</Button>
 								)}
-							<Button
-								marginRight='10px'
-								height='40px'
-								width='200px'
-								bgColor='#b0c5a4'
-								color='#fff'
-								onClick={() => NotifyCustomer(data != null && data[0]._id)}>
-								Ready to Serve
-							</Button>
-							{data != null && data[0].paymentStatus !== "pending" && (
+
+							{(data != null && data[0].paymentStatus !== "Unpaid") ||
+								(data != null && data[0].orderStatus !== "Cancelled" && (
+									<Button
+										height='40px'
+										width='200px'
+										marginRight={
+											data != null &&
+											data[0].paymentType === "Pay Online" &&
+											"10px"
+										}
+										bgColor='#EE4E4E'
+										color='#fff'
+										onClick={() => cancelOrder()}>
+										Cancel Order
+									</Button>
+								))}
+
+							{data != null && data[0].orderStatus === "Pending" && (
+								<Button
+									marginRight={
+										data != null && data[0].orderStatus === "Pending" && "10px"
+									}
+									height='40px'
+									width='200px'
+									bgColor='#b0c5a4'
+									color='#fff'
+									onClick={() => NotifyCustomer(data != null && data[0]._id)}>
+									Ready to Serve
+								</Button>
+							)}
+
+							{data != null && data[0].orderStatus === "Pending" && (
 								<Button
 									height='40px'
 									width='200px'

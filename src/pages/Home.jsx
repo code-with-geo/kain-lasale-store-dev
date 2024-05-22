@@ -5,6 +5,7 @@ import Widget from "../components/home/Widget";
 import Table from "../components/home/Table";
 import { useOrders } from "../context/Orders";
 import { useGetStoreID } from "../hooks/Products";
+import BarChartTable from "../components/home/BarChartTable";
 
 const Container = styled.div``;
 
@@ -24,6 +25,14 @@ const TableContainer = styled.div`
 	padding: 10px;
 `;
 
+const ChartContainer = styled.div`
+	max-width: 80%;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
 function Home() {
 	const storeID = useGetStoreID();
 	const {
@@ -40,6 +49,9 @@ function Home() {
 		<>
 			<Container>
 				<Wrapper>
+					<ChartContainer>
+						<BarChartTable />
+					</ChartContainer>
 					<WidgetContainer>
 						<Widget title='Orders' value={count != null && count} />
 						<Widget title='Unpaid' value={unpaid != null && unpaid} />
