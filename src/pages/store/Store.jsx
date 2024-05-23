@@ -90,12 +90,20 @@ function Store() {
 	const [image, setImage] = useState();
 
 	const [name, setName] = useState();
+	const [address, setAddress] = useState();
 	const [description, setDescription] = useState();
+	const [contactPerson, setContactPerson] = useState();
+	const [contactNo, setContactNo] = useState();
+	const [storeHour, setStoreHour] = useState();
 
 	useEffect(() => {
 		if (store != null) {
 			setName(store.name);
+			setAddress(store.address);
 			setDescription(store.description);
+			setContactPerson(store.contactperson);
+			setContactNo(store.contactno);
+			setStoreHour(store.storehour);
 			setImage(store.image);
 		}
 
@@ -121,7 +129,12 @@ function Store() {
 		const formData = new FormData();
 		formData.append("storeID", storeID);
 		formData.append("name", name);
+		formData.append("address", address);
 		formData.append("description", description);
+		formData.append("contactperson", contactPerson);
+		formData.append("contactno", contactNo);
+		formData.append("storehour", storeHour);
+
 		if (files !== null) {
 			formData.append("file", files[0]);
 		}
@@ -133,7 +146,11 @@ function Store() {
 				{
 					storeID,
 					name,
+					address,
 					description,
+					contactperson: contactPerson,
+					contactno: contactNo,
+					storehour: storeHour,
 				}
 			)
 				.then((res) => {
@@ -203,11 +220,60 @@ function Store() {
 								</ListItem>
 								<ListItem>
 									<TextArea
+										placeholder='Please enter address'
+										required
+										value={address}
+										onChange={(e) => {
+											setAddress(e.target.value);
+										}}
+									/>
+								</ListItem>
+								<ListItem>
+									<TextArea
 										placeholder='Please enter product description'
 										required
 										value={description}
 										onChange={(e) => {
 											setDescription(e.target.value);
+										}}
+									/>
+								</ListItem>
+								<ListItem>
+									<TextBox
+										type='text'
+										height='30px'
+										width='515px'
+										placeholder='Please enter contact person'
+										required
+										value={contactPerson}
+										onChange={(e) => {
+											setContactPerson(e.target.value);
+										}}
+									/>
+								</ListItem>
+								<ListItem>
+									<TextBox
+										type='text'
+										height='30px'
+										width='515px'
+										placeholder='Please enter contact no.'
+										required
+										value={contactNo}
+										onChange={(e) => {
+											setContactNo(e.target.value);
+										}}
+									/>
+								</ListItem>
+								<ListItem>
+									<TextBox
+										type='text'
+										height='30px'
+										width='515px'
+										placeholder='Please enter store hour'
+										required
+										value={name}
+										onChange={(e) => {
+											setStoreHour(e.target.value);
 										}}
 									/>
 								</ListItem>
